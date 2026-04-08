@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weather</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@300;400;700&family=Azeret+Mono:wght@200;300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="card">
+  <!-- Status -->
+  <div class="status-bar" id="statusBar"></div>
+  <div class="error" id="errorMsg"></div>
+
+  <!-- Search -->
+  <div class="search">
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+      <circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/>
+    </svg>
+    <input id="searchInput" type="text" placeholder="Enter city..." autocomplete="off" />
+    <button id="searchBtn">FETCH</button>
+  </div>
+
+  <!-- Location + Time -->
+  <div class="location">
+    <div>
+      <div class="city" id="cityName">Lagos</div>
+      <div class="country" id="countryName">Nigeria · NG</div>
+    </div>
+    <div class="time-block">
+      <div class="time" id="clock">--:--</div>
+      <div class="date" id="dateLine">--- -- ----</div>
+    </div>
+  </div>
+
+  <!-- Hero -->
+  <div class="hero">
+    <div class="temp-wrap">
+      <span class="temp-val" id="tempVal">28</span>
+      <span class="temp-unit" id="unitToggle" title="Toggle units">°C</span>
+    </div>
+    <div class="cond-wrap">
+      <span class="cond-icon" id="condIcon">⛅</span>
+      <span class="cond-text" id="condText">Partly Cloudy</span>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-label">Feels</div>
+      <div class="stat-val" id="feelsVal">31°</div>
+      <div class="stat-sub">apparent</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Humid</div>
+      <div class="stat-val" id="humidVal">74%</div>
+      <div class="stat-sub">relative</div>
+    </div>
+    <div class="stat">
+      <div class="stat-label">Wind</div>
+      <div class="stat-val" id="windVal">18</div>
+      <div class="stat-sub" id="windSub">km/h · SW</div>
+    </div>
+  </div>
+
+  <!-- Forecast -->
+  <div class="forecast-label">5-day forecast</div>
+  <div class="forecast" id="forecastRow">
+    <!-- populated by JS -->
+  </div>
+
+  <!-- API Hook notice -->
+  <div class="api-notice">
+    <strong>⚡ CONNECT YOUR AZURE FUNCTION</strong>
+    Replace <code>fetchWeather(city)</code> in the JS with a call to your Azure Function URL.<br>
+    Expected shape: <code>{ city, country, temp_c, feels_c, humidity, wind_kph, wind_dir, condition, icon, forecast[] }</code>
+  </div>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
