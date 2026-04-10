@@ -4,4 +4,6 @@ __pycache__/
 readme.md
 .venv/
 myenv/
+api/local.settings.json
+frontend/config.js
 

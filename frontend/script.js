@@ -1,6 +1,5 @@
  // ─────────────────────────────────────────────
-  //  MOCK DATA  (swap fetchWeather() with your
-  //  Azure Function call when ready)
+  //  FRONTEND WEATHER MODE (Azure Function API)
   // ─────────────────────────────────────────────
   const MOCK = {
     city: "Lagos", country: "Nigeria · NG",
@@ -16,16 +15,48 @@
     ]
   };
 
-  // ─────────────────────────────────────────────
-  //  REPLACE THIS with your real Azure Function
-  //  e.g. const res = await fetch(`https://<fn>.azurewebsites.net/api/weather?city=${city}`);
-  //       return await res.json();
-  // ─────────────────────────────────────────────
+  const WEATHER_API_BASE = (window.WEATHER_API_BASE || '').trim() || '/api';
+
+  const iconMap = {
+    '01d': '☀️', '01n': '🌙',
+    '02d': '⛅', '02n': '☁️',
+    '03d': '☁️', '03n': '☁️',
+    '04d': '☁️', '04n': '☁️',
+    '09d': '🌧', '09n': '🌧',
+    '10d': '🌦', '10n': '🌧',
+    '11d': '⛈', '11n': '⛈',
+    '13d': '❄️', '13n': '❄️',
+    '50d': '🌫', '50n': '🌫'
+  };
+
+  async function fetchJsonOrThrow(url, errorPrefix) {
+    const res = await fetch(url);
+    const payload = await res.json().catch(() => ({}));
+    if (!res.ok) {
+      const reason = payload.message || `HTTP ${res.status}`;
+      throw new Error(`${errorPrefix}: ${reason}`);
+    }
+    return payload;
+  }
+
   async function fetchWeather(city) {
-    // Simulated network delay
-    await new Promise(r => setTimeout(r, 600));
-    // Return mock — replace with real fetch ↑
-    return { ...MOCK, city: city || MOCK.city };
+    const query = (city || MOCK.city).trim();
+    const apiUrl = `${WEATHER_API_BASE}/weather?city=${encodeURIComponent(query)}`;
+    const payload = await fetchJsonOrThrow(apiUrl, 'Weather API request failed');
+
+    return {
+      ...MOCK,
+      ...payload,
+      icon: iconMap[payload.icon] || payload.icon || MOCK.icon,
+      forecast: Array.isArray(payload.forecast) && payload.forecast.length
+        ? payload.forecast.map((f, i) => ({
+            day: f.day || ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'][i % 5],
+            icon: iconMap[f.icon] || f.icon || '⛅',
+            hi_c: Number.isFinite(f.hi_c) ? f.hi_c : MOCK.forecast[i % 5].hi_c,
+            lo_c: Number.isFinite(f.lo_c) ? f.lo_c : MOCK.forecast[i % 5].lo_c
+          }))
+        : MOCK.forecast
+    };
   }
 
   // ─────────────────────────────────────────────
@@ -57,8 +88,6 @@
 
     // Forecast
     const row = document.getElementById('forecastRow');
-    const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
-    const todayName = days[new Date().getDay()];
     row.innerHTML = d.forecast.map((f, i) => `
       <div class="fc-day ${i === 0 ? 'today' : ''}">
         <span class="fc-name">${i === 0 ? 'Now' : f.day}</span>
@@ -82,7 +111,7 @@
       bar.style.width = '100%';
       setTimeout(() => bar.style.width = '0', 400);
     } catch (e) {
-      err.textContent = 'Could not load weather data.';
+      err.textContent = e?.message || 'Could not load weather data.';
       bar.style.width = '0';
     }
   }

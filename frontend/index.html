@@ -75,12 +75,13 @@
 
   <!-- API Hook notice -->
   <div class="api-notice">
-    <strong>⚡ CONNECT YOUR AZURE FUNCTION</strong>
-    Replace <code>fetchWeather(city)</code> in the JS with a call to your Azure Function URL.<br>
-    Expected shape: <code>{ city, country, temp_c, feels_c, humidity, wind_kph, wind_dir, condition, icon, forecast[] }</code>
+    <strong>⚡ AZURE FUNCTION API MODE</strong>
+    Create <code>frontend/config.js</code> from <code>frontend/config.example.js</code> (default <code>/api</code>).<br>
+    The search input calls <code>/api/weather?city=...</code>. Add <code>sendEmail=true</code> to trigger ACS mail.
   </div>
 </div>
 
+<script src="config.js"></script>
 <script src="script.js"></script>
 </body>
 </html>

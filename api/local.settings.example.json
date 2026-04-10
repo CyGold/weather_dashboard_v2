@@ -1,0 +1,11 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "python",
+    "OPENWEATHER_API_KEY": "your_openweather_api_key",
+    "ACS_CONNECTION_STRING": "endpoint=https://<resource>.communication.azure.com/;accesskey=<key>",
+    "ACS_EMAIL_FROM": "DoNotReply@<your-verified-domain>",
+    "ACS_EMAIL_TO": "recipient@example.com"
+  }
+}
